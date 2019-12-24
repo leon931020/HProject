@@ -3,7 +3,7 @@
 
 #include <QObject>
 
-class HWindowApi : public QObject
+class Q_DECL_EXPORT HWindowApi : public QObject
 {
     Q_OBJECT
 private:

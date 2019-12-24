@@ -31,6 +31,11 @@ else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../bin/ -lhConfig
 else:unix: CONFIG(release, debug|release) LIBS += -L$$PWD/../../../bin/ -lhConfigManage
 else:unix: CONFIG(debug, debug|release) LIBS += -L$$PWD/../../../bin/ -lhConfigManage_d
 
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../bin/ -lhWindowApi
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../bin/ -lhWindowApi_d
+else:unix: CONFIG(release, debug|release) LIBS += -L$$PWD/../../../bin/ -lhWindowApi
+else:unix: CONFIG(debug, debug|release) LIBS += -L$$PWD/../../../bin/ -lhWindowApi_d
+
 greaterThan(QT_MAJOR_VERSION, 4) {
     QT += designer
 } else {

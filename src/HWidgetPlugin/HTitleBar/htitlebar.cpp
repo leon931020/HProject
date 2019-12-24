@@ -230,7 +230,7 @@ void HTitleBar::itemClicked()
             QVariantMap options;
             options.insert("color",QColor(item.iconColor));
             options.insert("scale-factor",1.0);
-            options.insert("anim", qVariantFromValue( new QtAwesomeAnimation(btn) ) );
+            options.insert("anim", qVariantFromValue( new QtAwesomeAnimation(btn,1000,30) ) );
 
             btn->setIcon(awesome->icon( item.icon.toInt(0,16), options  ) );
 
