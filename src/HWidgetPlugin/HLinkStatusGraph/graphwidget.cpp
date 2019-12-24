@@ -59,7 +59,7 @@ GraphWidget::GraphWidget(QWidget *parent)
     setViewportUpdateMode(BoundingRectViewportUpdate);
     setRenderHint(QPainter::Antialiasing);
     setTransformationAnchor(AnchorUnderMouse);
-    scale(qreal(0.8), qreal(0.8));
+    scale(qreal(2.8), qreal(2.8));
     setMinimumSize(400, 400);
     setWindowTitle(tr("Elastic Nodes"));
 //! [0]

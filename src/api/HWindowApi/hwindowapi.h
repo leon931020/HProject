@@ -14,7 +14,8 @@ private:
     static HWindowApi *m_instance;
 public:
     static HWindowApi* getInstance();
-
+signals:
+    void titleItemClicked(const QString &name);
 protected:
     bool eventFilter(QObject *obj, QEvent *evt);
 

@@ -1,4 +1,4 @@
-#include "hlinkstatusgraph.h"
+#include "hlinkstatusui.h"
 #include "hlinkstatusgraphplugin.h"
 #include "hdefine.h"
 HLinkStatusGraphPlugin ::HLinkStatusGraphPlugin (QObject *parent) :
@@ -10,7 +10,7 @@ HLinkStatusGraphPlugin ::HLinkStatusGraphPlugin (QObject *parent) :
 
 QString HLinkStatusGraphPlugin ::getPluName() const
 {
-    QString pluName = tr("HLinkStatusGraph");
+    QString pluName = tr("systemStatus");
     return pluName;
 }
 
@@ -26,8 +26,7 @@ int HLinkStatusGraphPlugin ::windowType() const
 
 QWidget *HLinkStatusGraphPlugin ::createWindow(QWidget *parent) const
 {
-   // LayoutWindow *window=new LayoutWindow(parent);
-   // window->initQss();
-    HLinkStatusGraph *window = new HLinkStatusGraph(parent);
+
+    HLinkStatusUi *window = new HLinkStatusUi(parent);
     return  window;
 }

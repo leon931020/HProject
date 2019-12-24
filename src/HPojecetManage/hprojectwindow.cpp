@@ -20,6 +20,8 @@ HProjectWindow::HProjectWindow(QWidget *parent) :
     setStackedLayout();
 
     _setStyle();
+
+    bindSigSlots();
 }
 
 HProjectWindow::~HProjectWindow()
@@ -127,6 +129,7 @@ void HProjectWindow::setStackedLayout()
             {
                 m_stackedLayout->insertWidget(index,pluInter->createWindow(this));
 
+                qDebug()<<pluItem->pluName;
                 m_layouHash.insert(pluItem->pluName,index);
                 index++;
 
@@ -136,7 +139,7 @@ void HProjectWindow::setStackedLayout()
 
     }
 
-    switchProWnd("HLinkStatusGraph");
+    switchProWnd("systemStatus");
 
 
 
@@ -177,6 +180,11 @@ void HProjectWindow::_setStyle()
     this->setProperty("canMove", true);
     this->installEventFilter(HWindowApi::getInstance());
 
+}
+
+void HProjectWindow::bindSigSlots()
+{
+    connect(HWindowApi::getInstance(),SIGNAL(titleItemClicked(QString)),this,SLOT(switchProWnd(QString)));
 }
 
 

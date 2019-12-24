@@ -19,8 +19,11 @@ private:
     void initWorkSpace();
     void initTitleLayout();
     void setStackedLayout();
-    bool switchProWnd(QString funName);
+
     void _setStyle();
+    void bindSigSlots();
+private slots:
+    bool switchProWnd(QString funName);
 private:
     QWidget * m_titlebar;
 

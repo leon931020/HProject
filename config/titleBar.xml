@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<titleBar>
+<item index="0" name="systemStatus" displayName="系统状态" icon="0xf2d9" iconColor="#1ABC9C"/>
+<item index="1" name="nodeStatus" displayName="节点状态" icon="0xf108" iconColor="#1ABC9C"/>
+<item index="3" name="logInfo" displayName="日志信息" icon="0xf15b" iconColor="#1ABC9C"/>
+<item index="2" name="MessageInfo" displayName="报文信息" icon="0xf0ec" iconColor="#1ABC9C"/>
+</titleBar>

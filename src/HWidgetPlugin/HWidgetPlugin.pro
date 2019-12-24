@@ -2,4 +2,5 @@ TEMPLATE = subdirs
 
 SUBDIRS += \
     HTitleBar \
-    HLinkStatusGraph
+    HLinkStatusGraph \
+    NodeStatus

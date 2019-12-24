@@ -5,8 +5,13 @@
 #include"QDesktopWidget"
 #include"QPainter"
 #include"qdebug.h"
+#include"hconfigmanage.h"
+#include"qfile.h"
+#include"QDomDocument"
+#include"qtoolbutton.h"
+#include"hwindowapi.h"
 HTitleBar::HTitleBar(QWidget *parent) :
-    QWidget(parent),max(false),m_parent(parent),
+    QWidget(parent),max(false),m_parent(parent),awesome(NULL),
     ui(new Ui::HTitleBar)
 {
     ui->setupUi(this);
@@ -15,7 +20,8 @@ HTitleBar::HTitleBar(QWidget *parent) :
     if(m_parent!=NULL)
         location = m_parent->geometry();
 
-    initStyle();
+    init();
+
 }
 
 HTitleBar::~HTitleBar()
@@ -35,17 +41,16 @@ void HTitleBar::paintEvent(QPaintEvent *)
 
 void HTitleBar::initStyle()
 {
-    QtAwesome* awesome = new QtAwesome();
-    awesome->initFontAwesome();
+    if(awesome == NULL)
+    {
+        awesome = new QtAwesome();
+        awesome->initFontAwesome();
+    }
 
-    QVariantMap options;
-    options.insert("color",QColor(Qt::red));
-    options.insert("anim", qVariantFromValue( new QtAwesomeAnimation(ui->btnConfig) ) );
-
-    ui->btnConfig->setIcon(awesome->icon( fa::group, options  ) );
 
     this->setProperty("form", "title");
-    this->setProperty("form", true);
+    this->setProperty("nav", "top");
+
 
 
     ui->labIco->setFont(awesome->font(50));
@@ -59,24 +64,112 @@ void HTitleBar::initStyle()
     ui->btnMenu_Close->setText(QChar(0xF00d));
 }
 
-void HTitleBar::addQToolBtn(QToolButton * btn)
+bool HTitleBar::getTitleItems()
 {
-    if(btn==NULL)
-        return ;
+    QString filePath = HConfigManage::getInstance()->getAbsolutePath("/config/titleBar.xml");
+    if(filePath == "")
+        return false ;
+    else
+    {
+        QDomDocument dom;
+        QFile r_file(filePath);
+        if (!r_file.open( QIODevice::ReadOnly | QIODevice::Text))
+        {
+            return false;
+        }
+        dom.setContent(&r_file);
+        r_file.close();
 
-    //btn = new QToolButton(ui->widgetTop);
-    //btn->setObjectName(QStringLiteral("btn"));
-    QSizePolicy sizePolicy1;
-    sizePolicy1.setHeightForWidth(btn->sizePolicy().hasHeightForWidth());
-    btn->setSizePolicy(sizePolicy1);
-    btn->setStyleSheet(QStringLiteral(""));
-   // QIcon icon1;
-   // icon1.addFile(QStringLiteral(":/demo/main_help.png"), QSize(), QIcon::Normal, QIcon::Off);
-   // btn->setIcon(icon1);
+        barInfo.clear();
+
+        QDomElement root = dom.documentElement();
+        QString root_name = root.tagName();
+        //判断XML头格式<titleBar>
+        if (root_name == "titleBar")
+        {
+            //根节点
+            QDomElement person = root.firstChildElement();
+            if (person.isNull())
+            {
+                return false;
+            }
+            QDomNodeList list = root.childNodes();
+            int count = list.count();
+            //第一层<function>子节点内容
+            for (int i = 0;i < count;++i)
+            {
+                QDomNode dom_node = list.item(i);
+                QDomElement element = dom_node.toElement();
+
+                titleItem info;
+                info.index = element.attributeNode("index").value().toInt();
+                info.name = element.attributeNode("name").value();
+                info.displayName = element.attributeNode("displayName").value();
+                info.icon = element.attributeNode("icon").value();
+                info.iconColor = element.attributeNode("iconColor").value();
+
+                barInfo.append(info);
+            }
+        }
+
+
+    }
+}
+
+void HTitleBar::fillTitle()
+{
+
+    qSort(barInfo.begin(),barInfo.end(),compareByIndex);
+    QList<titleItem>::iterator itr = barInfo.begin();
+    for (; itr != barInfo.end();++itr)
+    {
+        addQToolBtn(*itr);
+    }
+}
+
+void HTitleBar::addQToolBtn(const titleItem & item)
+{
+
+
+
+    QToolButton * btn = new QToolButton(ui->widgetTop);
+    btn->setFixedHeight(70);
+    btn->setFixedWidth(70);
+    btn->setObjectName(item.name);
+    btn->setText(item.displayName);
+
+
     btn->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
 
     ui->horizontalLayout_3->addWidget(btn);
+
+    QVariantMap options;
+    options.insert("color",QColor(item.iconColor));
+    options.insert("scale-factor",1.0);
+    //options.insert("anim", qVariantFromValue( new QtAwesomeAnimation(ui->btnConfig) ) );
+
+    btn->setIcon(awesome->icon( item.icon.toInt(0,16), options  ) );
+
+    connect(btn,SIGNAL(clicked(bool)),this,SLOT(itemClicked()));
+
+    btnList.append(btn);
 }
+
+void HTitleBar::init()
+{
+    initStyle();
+
+    getTitleItems();
+
+    fillTitle();
+}
+
+bool HTitleBar::compareByIndex(const HTitleBar::titleItem &r1, const HTitleBar::titleItem &r2)
+{
+    return r1.index < r2.index;
+}
+
+
 
 
 void HTitleBar::on_btnMenu_Min_clicked()
@@ -119,8 +212,45 @@ void HTitleBar::on_btnMenu_Max_clicked()
 
 void HTitleBar::on_btnMenu_Close_clicked()
 {
-    exit(0);
-    //m_parent->close();
+ //   exit(0);
+    m_parent->close();
+}
+
+void HTitleBar::itemClicked()
+{
+    QToolButton *btn = (QToolButton *)sender();
+
+    for(int i=0;i<barInfo.size();i++)
+    {
+        titleItem item = barInfo.at(i);
+        QToolButton * temp = btnList.at(i);
+
+        if(item.name == btn->objectName())
+        {
+            QVariantMap options;
+            options.insert("color",QColor(item.iconColor));
+            options.insert("scale-factor",1.0);
+            options.insert("anim", qVariantFromValue( new QtAwesomeAnimation(btn) ) );
+
+            btn->setIcon(awesome->icon( item.icon.toInt(0,16), options  ) );
+
+        }
+        else
+        {
+            QVariantMap options;
+            options.insert("color",QColor(item.iconColor));
+            options.insert("scale-factor",1.0);
+            //options.insert("anim", qVariantFromValue( new QtAwesomeAnimation(btn) ) );
+
+            temp->setIcon(awesome->icon( item.icon.toInt(0,16), options  ) );
+
+        }
+
+    }
+
+    QString name = btn->objectName();
+
+    emit HWindowApi::getInstance()->titleItemClicked(name);
 }
 
 

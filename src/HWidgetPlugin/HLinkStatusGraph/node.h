@@ -46,6 +46,7 @@
 #include"hdefine.h"
 class Edge;
 class GraphWidget;
+class QtAwesome;
 QT_BEGIN_NAMESPACE
 class QGraphicsSceneMouseEvent;
 QT_END_NAMESPACE
@@ -56,6 +57,7 @@ class Node : public QGraphicsItem
 
 public:
     Node(GraphWidget *graphWidget);
+    ~Node();
 
     void addEdge(Edge *edge);
     QList<Edge *> edges() const;
@@ -90,6 +92,7 @@ private:
     QList<Edge *> edgeList;
     QPointF newPos;
     GraphWidget *graph;
+    QtAwesome * awesome;
     HDefine::HNodeInfo _info;
 };
 //! [0]

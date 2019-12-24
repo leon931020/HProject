@@ -16,7 +16,7 @@ class Q_DECL_EXPORT QtAwesomeAnimation : public QObject
 Q_OBJECT
 
 public:
-    QtAwesomeAnimation( QWidget* parentWidget, int interval=10, int step=1);
+    QtAwesomeAnimation( QWidget* parentWidget, int interval=4, int step=1);
 
     void setup( QPainter& painter, const QRect& rect );
 
