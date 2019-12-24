@@ -11,7 +11,7 @@ class QWidget;
 ///
 /// Basic Animation Support for QtAwesome (Inspired by https://github.com/spyder-ide/qtawesome)
 ///
-class QtAwesomeAnimation : public QObject
+class Q_DECL_EXPORT QtAwesomeAnimation : public QObject
 {
 Q_OBJECT
 

@@ -12,7 +12,8 @@ HTitleBar::HTitleBar(QWidget *parent) :
     ui->setupUi(this);
 
 
-    location = m_parent->geometry();
+    if(m_parent!=NULL)
+        location = m_parent->geometry();
 
     initStyle();
 }
@@ -50,8 +51,11 @@ void HTitleBar::initStyle()
     ui->labIco->setFont(awesome->font(50));
     ui->labIco->setText(QChar( fa::group));
 
+    ui->btnMenu_Min->setFont(awesome->font(20));
     ui->btnMenu_Min->setText(QChar(0xF068));
+    ui->btnMenu_Max->setFont(awesome->font(20));
     ui->btnMenu_Max->setText( QChar(0xf2d0));
+    ui->btnMenu_Close->setFont(awesome->font(20));
     ui->btnMenu_Close->setText(QChar(0xF00d));
 }
 
@@ -77,8 +81,10 @@ void HTitleBar::addQToolBtn(QToolButton * btn)
 
 void HTitleBar::on_btnMenu_Min_clicked()
 {
-
-    m_parent->showMinimized();
+    if(m_parent!=NULL)
+    {
+        m_parent->showMinimized();
+    }
 
 
 }
@@ -88,20 +94,27 @@ void HTitleBar::on_btnMenu_Max_clicked()
 
     //the current state is Maxed
     //will be normalSized
-    if (max)
+    if(m_parent!=NULL)
     {
+        if (max)
+        {
 
-        m_parent->setGeometry(location);
-        m_parent->setProperty("canMove", true);
-        ui->btnMenu_Max->setText( QChar(0xf2d0));
-    } else {
-        location = m_parent->geometry();
-        m_parent->setGeometry(qApp->desktop()->availableGeometry());
-        ui->btnMenu_Max->setText( QChar(0xf2d2));
-        m_parent->setProperty("canMove", false);
+            m_parent->setGeometry(location);
+            m_parent->setProperty("canMove", true);
+            ui->btnMenu_Max->setText( QChar(0xf2d0));
+        } else {
+            location = m_parent->geometry();
+            m_parent->setGeometry(qApp->desktop()->availableGeometry());
+            ui->btnMenu_Max->setText( QChar(0xf2d2));
+            m_parent->setProperty("canMove", false);
+        }
+
+        max = !max;
     }
-
-    max = !max;
+    else
+    {
+        return ;
+    }
 }
 
 void HTitleBar::on_btnMenu_Close_clicked()
