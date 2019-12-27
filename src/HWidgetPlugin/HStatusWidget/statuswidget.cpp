@@ -1,4 +1,4 @@
-﻿#include"statuswidget.h"
+#include"statuswidget.h"
 #include"qpainter.h"
 #include"qtimer.h"
 #include "qlabel.h"
@@ -8,11 +8,11 @@
 #include"qlabel.h"
 StatusWidget::StatusWidget(QWidget *parent) : QWidget(parent)
 {
-    title = QString::fromLocal8Bit("DDS-异常检测工具");
-    version = QString::fromLocal8Bit("V1.0");
-    author = QString::fromLocal8Bit("南京磐优信息科技有限公司");
+    title = QString("DDS-异常检测工具");
+    version = QString("V1.0");
+    author = QString("南京磐优信息科技有限公司");
     currentUserName = "admin";
-    currentUserType = QString::fromLocal8Bit("管理员");
+    currentUserType = QString("管理员");
     fontName = "Microsoft Yahei";
     fontSize = 9;
     lineFixedWidth = true;
@@ -70,17 +70,17 @@ void StatusWidget::showTime()
 
     QDateTime now = QDateTime::currentDateTime();
    labLive->setText(QString("%1:%2%3%4%5%6%7%8%9")\
-                    .arg(QString::fromLocal8Bit("已运行"))\
-                    .arg(day).arg(QString::fromLocal8Bit("天"))\
-                    .arg(hour).arg(QString::fromLocal8Bit("时"))\
-                    .arg(minute).arg(QString::fromLocal8Bit("分"))\
-                    .arg(seconds).arg(QString::fromLocal8Bit("秒")));
+                    .arg(QString("已运行"))\
+                    .arg(day).arg(QString("天"))\
+                    .arg(hour).arg(QString("时"))\
+                    .arg(minute).arg(QString("分"))\
+                    .arg(seconds).arg(QString("秒")));
 
    labDateTime->setText(now.toString("%1:yyyy%2 MM%3 dd%4 HH:mm:ss")
-                        .arg(QString::fromLocal8Bit("当前时间"))
-                        .arg(QString::fromLocal8Bit("年"))
-                        .arg(QString::fromLocal8Bit("月"))
-                        .arg(QString::fromLocal8Bit("日")));
+                        .arg(QString("当前时间"))
+                        .arg(QString("年"))
+                        .arg(QString("月"))
+                        .arg(QString("日")));
 
 }
 
@@ -114,7 +114,7 @@ void StatusWidget::setTitle(const QString &title)
     if (this->title != title) {
         this->title = title;
         if (labTitle != 0) {
-            labTitle->setText(QString("%1%2 %3").arg(QString::fromLocal8Bit("欢迎使用"))
+            labTitle->setText(QString("%1%2 %3").arg(QString("欢迎使用"))
                               .arg(title).arg(version));
         }
     }
@@ -125,7 +125,7 @@ void StatusWidget::setVersion(const QString &version)
     if (this->version != version) {
         this->version = version;
         if (labTitle != 0) {
-            labTitle->setText(QString("%1%2 %3").arg(QString::fromLocal8Bit("欢迎使用"))
+            labTitle->setText(QString("%1%2 %3").arg(QString("欢迎使用"))
                               .arg(title).arg(version));
         }
     }
@@ -136,7 +136,7 @@ void StatusWidget::setAuthor(const QString &author)
     if (this->author != author) {
         this->author = author;
         if (labAuthor != 0) {
-            labAuthor->setText(QString("%1: %2").arg(QString::fromLocal8Bit("版权所有")).arg(author));
+            labAuthor->setText(QString("%1: %2").arg(QString("版权所有")).arg(author));
         }
     }
 }
@@ -147,10 +147,10 @@ void StatusWidget::setCurrentUserName(const QString &currentUserName)
         this->currentUserName = currentUserName;
         if (labUser != 0) {
             labUser->setText(QString("%1: %2:%3%4")
-                             .arg(QString::fromLocal8Bit("当前用户"))\
+                             .arg(QString("当前用户"))\
                              .arg(currentUserName)\
                              .arg(currentUserType)\
-                             .arg(QString::fromLocal8Bit("】")));
+                             .arg(QString("】")));
         }
     }
 }
@@ -161,10 +161,10 @@ void StatusWidget::setCurrentUserType(const QString &currentUserType)
         this->currentUserType = currentUserType;
         if (labUser != 0) {
             labUser->setText(QString("%1: %2:%3%4")
-                             .arg(QString::fromLocal8Bit("当前用户"))
+                             .arg(QString("当前用户"))
                              .arg(currentUserName)
                              .arg(currentUserType)
-                             .arg(QString::fromLocal8Bit("】")));
+                             .arg(QString("】")));
         }
     }
 }
@@ -189,18 +189,18 @@ void StatusWidget::setLineFixedWidth(bool lineFixedWidth)
 void StatusWidget::start(int interval)
 {
     labTitle = new QLabel;
-    labTitle->setText(QString("%1%2 %3").arg(QString::fromLocal8Bit("欢迎使用")).arg(title).arg(version));
+    labTitle->setText(QString("%1%2 %3").arg(QString("欢迎使用")).arg(title).arg(version));
 
     labAuthor = new QLabel;
-    labAuthor->setText(QString("%1: %2").arg(QString::fromLocal8Bit("版权所有")).arg(author));
+    labAuthor->setText(QString("%1: %2").arg(QString("版权所有")).arg(author));
 
     labUser = new QLabel;
     labUser->setText(QString("%1: %2%3%4%5")
-                     .arg(QString::fromLocal8Bit("当前用户"))
+                     .arg(QString("当前用户"))
                      .arg(currentUserName)
-                     .arg(QString::fromLocal8Bit("【"))
+                     .arg(QString("【"))
                      .arg(currentUserType)
-                     .arg(QString::fromLocal8Bit("】")));
+                     .arg(QString("】")));
 
     labLive = new QLabel;
     labDateTime = new QLabel;
