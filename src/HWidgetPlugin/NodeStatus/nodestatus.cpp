@@ -7,8 +7,11 @@
 #include"QHBoxLayout"
 #include"statusrating.h"
 #include"nodelist.h"
+#include"structuregraph.h"
+#include"qpainter.h"
+#include"QStyleOption"
 NodeStatus::NodeStatus(QWidget *parent) :
-    QWidget(parent),m_nodeTable(NULL),nodeList(NULL),
+    QWidget(parent),m_nodeTable(NULL),nodeList(NULL),graph(NULL),
     ui(new Ui::NodeStatus)
 {
     ui->setupUi(this);
@@ -22,10 +25,20 @@ NodeStatus::~NodeStatus()
     delete ui;
 }
 
+void NodeStatus::paintEvent(QPaintEvent *event)
+{
+    QStyleOption opt;
+    opt.init(this);
+    QPainter p(this);
+
+    style()->drawPrimitive(QStyle::PE_Widget,&opt,&p,this);
+}
+
 void NodeStatus::init()
 {
     initNodeInfo();
     initNodeList();
+    initStructGraph();
 
 }
 
@@ -61,6 +74,17 @@ void NodeStatus::initNodeList()
         QHBoxLayout *layout = new QHBoxLayout(ui->nodeListWidget);
         layout->setContentsMargins(0,0,0,0);
         layout->addWidget(nodeList);
+    }
+}
+
+void NodeStatus::initStructGraph()
+{
+    if(graph == NULL)
+    {
+        graph = new StructureGraph;
+        QHBoxLayout *layout = new QHBoxLayout(ui->structureGraphWidget);
+        layout->setContentsMargins(0,0,0,0);
+        layout->addWidget(graph);
     }
 }
 void NodeStatus:: populateTableWidget(QTableWidget *tableWidget)

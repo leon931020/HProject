@@ -78,6 +78,9 @@ void HQss::changeStyle(HQss::Style style)
         changeQss(this->highColor,"#00BB9E");
     }
 
+
+    emit styleChanged(style);
+
 }
 
 void HQss::changeQss(QString &color, const QString &strColor)

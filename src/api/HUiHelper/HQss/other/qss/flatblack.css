@@ -93,13 +93,19 @@ border-radius:3px;
 .QGroupBox{
 border:1px solid #67696B;
 border-radius:5px;
-margin-top:3ex;
+margin-top:10px;
 }
 
 .QGroupBox::title{
 subcontrol-origin:margin;
 position:relative;
 left:10px;
+}
+
+QGraphicsView{
+border:1px solid #67696B;
+border-radius:5px;
+background:qlineargradient(spread:pad,x1:0,y1:0,x2:0,y2:1,stop:0 #404244,stop:1 #404244);
 }
 
 .QPushButton,.QToolButton{

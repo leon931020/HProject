@@ -33,12 +33,12 @@ private:
     virtual ~HQss();
 
     static HQss *m_uiInstance;
-
-
+Q_SIGNALS:
+    void styleChanged(HQss::Style style);
 //其它样式设置共有函数开始
 public slots:
 
-    void changeStyle(Style style);
+    void changeStyle(HQss::Style);
 
 public:
     void changeQss(QString &color, const QString &strColor);

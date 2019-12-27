@@ -4,6 +4,7 @@
 #include <QWidget>
 class QTableWidget;
 class NodeList;
+class StructureGraph;
 namespace Ui {
 class NodeStatus;
 }
@@ -29,6 +30,7 @@ public:
 public:
     explicit NodeStatus(QWidget *parent = 0);
     ~NodeStatus();
+    void paintEvent(QPaintEvent *event);
 private:
     void populateTableWidget(QTableWidget *tableWidget);
 
@@ -37,12 +39,16 @@ private:
     void initNodeInfo();
 
     void initNodeList();
+
+    void initStructGraph();
 private:
     Ui::NodeStatus *ui;
 
     QTableWidget * m_nodeTable;
 
     NodeList *nodeList;
+
+    StructureGraph *graph;
 
     QList<NodeInfo> infoList;
 };

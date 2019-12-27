@@ -14,6 +14,7 @@ class NodeList : public QWidget
 public:
     explicit NodeList(QWidget *parent = 0);
     ~NodeList();
+    void paintEvent(QPaintEvent *event);
 private slots:
     void on_normalBtn_clicked();
 

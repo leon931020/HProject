@@ -13,27 +13,15 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
-   <property name="leftMargin">
-    <number>0</number>
-   </property>
-   <property name="topMargin">
-    <number>0</number>
-   </property>
-   <property name="rightMargin">
-    <number>0</number>
-   </property>
-   <property name="bottomMargin">
-    <number>0</number>
-   </property>
-   <property name="horizontalSpacing">
-    <number>0</number>
-   </property>
-   <item row="0" column="0">
+  <layout class="QGridLayout" name="gridLayout" columnstretch="1,2">
+   <item row="0" column="0" rowspan="2">
     <widget class="QWidget" name="nodeListWidget" native="true"/>
    </item>
    <item row="0" column="1">
     <widget class="QWidget" name="nodeInfoWidget" native="true"/>
+   </item>
+   <item row="1" column="1">
+    <widget class="QWidget" name="structureGraphWidget" native="true"/>
    </item>
   </layout>
  </widget>

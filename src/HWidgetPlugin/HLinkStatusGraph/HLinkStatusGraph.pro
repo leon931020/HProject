@@ -16,6 +16,7 @@ DESTDIR =   ../../../bin/sysPlugin/function/
 INCLUDEPATH += ../../../include/define/
 INCLUDEPATH += ../../../include/interface/
 INCLUDEPATH += ../../api/HUiHelper/QtAwesome/
+INCLUDEPATH += ../../api/HUiHelper/HQss
 
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../bin/ -lhUiHelper
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../bin/ -lhUiHelper_d

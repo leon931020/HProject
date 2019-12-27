@@ -2,6 +2,7 @@
 #define HLINKSTATUSUI_H
 
 #include <QWidget>
+#include"hqss.h"
 class GraphWidget;
 class RightPanelWidget;
 namespace Ui {
@@ -22,10 +23,13 @@ private:
     void initRightWidget();
     void initArray(int num);
     void initList();
+
+    void bindSigSlots();
 private:
     GraphWidget *m_graphWidget;
     RightPanelWidget *m_rightWidget;
-
+private slots:
+    void changeStyle(HQss::Style style);
 private:
     Ui::HLinkStatusUi *ui;
 };

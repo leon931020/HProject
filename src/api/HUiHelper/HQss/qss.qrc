@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>other/qss/flatblack.css</file>
         <file>other/qss/flatblack/add_bottom.png</file>
         <file>other/qss/flatblack/add_left.png</file>
         <file>other/qss/flatblack/add_right.png</file>
@@ -19,5 +18,6 @@
         <file>other/qss/flatblack/radiobutton_checked_disable.png</file>
         <file>other/qss/flatblack/radiobutton_unchecked.png</file>
         <file>other/qss/flatblack/radiobutton_unchecked_disable.png</file>
+        <file>other/qss/flatblack.css</file>
     </qresource>
 </RCC>

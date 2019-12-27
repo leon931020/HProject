@@ -3,9 +3,11 @@ TARGET      = $$qtLibraryTarget(nodestatusplugin)
 TEMPLATE    = lib
 
 HEADERS     += nodestatusplugin.h \
-               nodestatus.h
+               nodestatus.h \
+
 SOURCES     += nodestatusplugin.cpp \
-               nodestatus.cpp
+               nodestatus.cpp \
+
 RESOURCES   = icons.qrc
 LIBS        += -L. 
 
@@ -15,6 +17,7 @@ DESTDIR =   ../../../bin/sysPlugin/function/
 INCLUDEPATH += ../../../include/define/
 INCLUDEPATH += ../../../include/interface/
 INCLUDEPATH += ../../api/HUiHelper/QtAwesome/
+INCLUDEPATH += ../../api/HUiHelper/HQss/
 INCLUDEPATH += ../../HConfigManage/
 INCLUDEPATH += ../../api/HWindowApi/
 
@@ -43,5 +46,6 @@ FORMS += \
 
 include(nodesinfo.pri)
 include(nodeList.pri)
+include(structureGraph.pri)
 
 

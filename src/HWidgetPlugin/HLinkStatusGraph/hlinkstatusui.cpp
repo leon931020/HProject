@@ -13,6 +13,7 @@ HLinkStatusUi::HLinkStatusUi(QWidget *parent) :
 {
     ui->setupUi(this);
     init();
+    bindSigSlots();
 }
 
 HLinkStatusUi::~HLinkStatusUi()
@@ -127,4 +128,15 @@ void HLinkStatusUi::initList()
 
     m_rightWidget->setWidget(widgets1, 3);
 
+}
+
+void HLinkStatusUi::bindSigSlots()
+{
+    connect(HQss::getInstance(),SIGNAL(styleChanged(HQss::Style)),this,SLOT(changeStyle(HQss::Style)));
+}
+
+void HLinkStatusUi::changeStyle(HQss::Style style)
+{
+    m_graphWidget->zoomIn();
+    m_graphWidget->zoomOut();
 }

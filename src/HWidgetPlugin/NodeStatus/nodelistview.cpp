@@ -49,6 +49,7 @@ void NodeListView::init()
     //去掉工具树状表头.
     this->setHeaderHidden(true);
 
+    this->setAnimated(true);
     //设置全部展开.
     this->expandAll();
 
