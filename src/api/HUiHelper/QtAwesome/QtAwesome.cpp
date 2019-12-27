@@ -14,7 +14,8 @@
 #include <QFile>
 #include <QFontDatabase>
 
-
+QtAwesome * QtAwesome::m_instance = NULL;
+QtAwesome::CGarbo QtAwesome::Garbo;
 
 /// The font-awesome icon painter
 class QtAwesomeCharIconPainter: public QtAwesomeIconPainter
@@ -175,6 +176,8 @@ QtAwesome::QtAwesome( QObject* parent )
 
     fontIconPainter_ = new QtAwesomeCharIconPainter();
 
+    this->initFontAwesome();
+
 }
 
 
@@ -183,6 +186,19 @@ QtAwesome::~QtAwesome()
     delete fontIconPainter_;
 //    delete errorIconPainter_;
     qDeleteAll(painterMap_);
+}
+
+QtAwesome *QtAwesome::getInstance()
+{
+    if(m_instance == NULL)
+    {
+        m_instance = new QtAwesome();
+        return m_instance;
+    }
+    else
+    {
+        return m_instance;
+    }
 }
 
 /// initializes the QtAwesome icon factory with the given fontname

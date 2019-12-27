@@ -12,6 +12,7 @@ class QRadioButton;
 class QScrollBar;
 class QLabel;
 class QAbstractButton;
+class QIcon;
 class Q_DECL_EXPORT HQss:public QObject
 {
     Q_OBJECT
@@ -31,9 +32,16 @@ private:
 
     virtual ~HQss();
 
+    static HQss *m_uiInstance;
+
 
 //其它样式设置共有函数开始
+public slots:
+
+    void changeStyle(Style style);
+
 public:
+    void changeQss(QString &color, const QString &strColor);
 
     //设置全局widget样式
     void setWidgetStyle(QWidget *outWidget,Style style);
@@ -111,13 +119,28 @@ private:
     //设置qss样式
     void setQss( QWidget *widget , const QString& path);
 
+    void recordColor(const QString &str);
+
     //加载AwesomeFont图形字体库
     void loadAwesomeFont();
+
+    void setStyle(const QString &str);
+
+
+    QString currentQss;         //当前QSS文本
+    QString textColor;          //文本颜色
+    QString panelColor;         //面板颜色
+    QString borderColor;        //边框颜色
+    QString normalColorStart;   //普通渐变开始颜色
+    QString normalColorEnd;     //普通渐变结束颜色
+    QString darkColorStart;     //加深渐变开始颜色
+    QString darkColorEnd;       //加深渐变结束颜色
+    QString highColor;          //边缘高亮颜色
 
 
 private:
 
-    static HQss *m_uiInstance;
+
 
     QFont m_iconFont;
 

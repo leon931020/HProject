@@ -4,7 +4,6 @@
 #include <QWidget>
 #include"qmap.h"
 class QToolButton;
-class QtAwesome;
 namespace Ui {
 class HTitleBar;
 }
@@ -45,6 +44,10 @@ private:
 
     void init();
 
+    void showColorMenu(bool show = false);
+
+    void setTitle(const QString &title);
+
     static bool compareByIndex(const titleItem &r1,const titleItem &r2);
 private slots:
     void on_btnMenu_Min_clicked();
@@ -52,15 +55,21 @@ private slots:
     void on_btnMenu_Close_clicked();
 
     void itemClicked();
+
+    void changeStyle();
 private:
     Ui::HTitleBar *ui;
     bool max;
     QRect location;
     QWidget *m_parent;
-    QtAwesome* awesome;
 
     QList<titleItem> barInfo;
     QList<QToolButton *>btnList;
+
+    QString titleName;
+    QString nameSize;
+    QString titleIcon;
+    QString titleIconSize;
 };
 
 #endif // HTITLEBAR_H

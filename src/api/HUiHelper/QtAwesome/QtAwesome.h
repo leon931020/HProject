@@ -824,10 +824,18 @@ class Q_DECL_EXPORT QtAwesome : public QObject
 {
 Q_OBJECT
 
-public:
+private:
 
     explicit QtAwesome(QObject *parent = 0);
     virtual ~QtAwesome();
+    static QtAwesome *m_instance;
+
+public:
+
+    static QtAwesome *getInstance();
+
+public:
+
 
     void init( const QString& fontname );
     bool initFontAwesome();
@@ -856,6 +864,26 @@ private:
     QHash<QString, QtAwesomeIconPainter*> painterMap_;     ///< A map of custom painters
     QVariantMap defaultOptions_;                           ///< The default icon options
     QtAwesomeIconPainter* fontIconPainter_;                ///< A special painter fo painting codepoints
+
+public:
+    class CGarbo
+    {
+    public:
+
+        ~CGarbo()
+        {
+            if (m_instance != NULL)
+
+            {
+                delete m_instance;
+                m_instance = NULL;
+            }
+        }
+
+    };
+    static CGarbo Garbo;
+
+    Q_DISABLE_COPY(QtAwesome)
 };
 
 

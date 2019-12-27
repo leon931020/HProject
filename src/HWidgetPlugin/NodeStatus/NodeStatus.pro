@@ -2,8 +2,10 @@ CONFIG      += plugin debug_and_release
 TARGET      = $$qtLibraryTarget(nodestatusplugin)
 TEMPLATE    = lib
 
-HEADERS     += nodestatusplugin.h
-SOURCES     += nodestatusplugin.cpp
+HEADERS     += nodestatusplugin.h \
+               nodestatus.h
+SOURCES     += nodestatusplugin.cpp \
+               nodestatus.cpp
 RESOURCES   = icons.qrc
 LIBS        += -L. 
 
@@ -35,6 +37,11 @@ greaterThan(QT_MAJOR_VERSION, 4) {
 target.path = $$[QT_INSTALL_PLUGINS]/designer
 INSTALLS    += target
 
-include(nodestatus.pri)
+
+FORMS += \
+    nodestatus.ui \
+
+include(nodesinfo.pri)
+include(nodeList.pri)
 
 

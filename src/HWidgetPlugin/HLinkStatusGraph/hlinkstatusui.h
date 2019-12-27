@@ -4,7 +4,6 @@
 #include <QWidget>
 class GraphWidget;
 class RightPanelWidget;
-class QtAwesome;
 namespace Ui {
 class HLinkStatusUi;
 }
@@ -27,7 +26,6 @@ private:
     GraphWidget *m_graphWidget;
     RightPanelWidget *m_rightWidget;
 
-    QtAwesome *awesome;
 private:
     Ui::HLinkStatusUi *ui;
 };

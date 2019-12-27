@@ -27,6 +27,8 @@ private slots:
 private:
     QWidget * m_titlebar;
 
+    QWidget * m_statusBar;
+
     QStackedLayout *m_stackedLayout;
 
     //the plugin's name-index in the m_stackedLayout;

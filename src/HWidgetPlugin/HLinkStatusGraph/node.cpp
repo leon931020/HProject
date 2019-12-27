@@ -51,7 +51,7 @@
 #include"QtAwesome.h"
 //! [0]
 Node::Node(GraphWidget *graphWidget)
-    : graph(graphWidget),awesome(NULL)
+    : graph(graphWidget)
 {
     setFlag(ItemIsMovable);
     setFlag(ItemSendsGeometryChanges);
@@ -62,11 +62,7 @@ Node::Node(GraphWidget *graphWidget)
 
 Node::~Node()
 {
-    if(awesome!=NULL)
-    {
-        delete awesome;
-        awesome = NULL;
-    }
+
 }
 //! [0]
 
@@ -181,14 +177,10 @@ void Node::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
 //    painter->drawEllipse(-7, -7, 20, 20);
 
 
-    if(awesome==NULL)
-    {
-        awesome = new QtAwesome();
-        awesome->initFontAwesome();
-    }
+
 
     painter->setPen(QPen(Qt::black));
-    painter->setFont(awesome->font(15));
+    painter->setFont(QtAwesome::getInstance()->font(15));
     painter->drawText(QRect(-7,-7,20,20),QChar(0xf108));
 
 //    QRadialGradient gradient(-3, -3, 10);

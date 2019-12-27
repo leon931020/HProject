@@ -10,9 +10,10 @@
 #include"QDomDocument"
 #include"qtoolbutton.h"
 #include"hwindowapi.h"
+#include"hqss.h"
 HTitleBar::HTitleBar(QWidget *parent) :
-    QWidget(parent),max(false),m_parent(parent),awesome(NULL),
-    ui(new Ui::HTitleBar)
+    QWidget(parent),max(false),m_parent(parent),
+    ui(new Ui::HTitleBar),titleName(""),nameSize(""),titleIcon(""),titleIconSize("")
 {
     ui->setupUi(this);
 
@@ -21,6 +22,8 @@ HTitleBar::HTitleBar(QWidget *parent) :
         location = m_parent->geometry();
 
     init();
+
+    setTitle("DDS-异常检测工具");
 
 }
 
@@ -41,26 +44,17 @@ void HTitleBar::paintEvent(QPaintEvent *)
 
 void HTitleBar::initStyle()
 {
-    if(awesome == NULL)
-    {
-        awesome = new QtAwesome();
-        awesome->initFontAwesome();
-    }
 
 
     this->setProperty("form", "title");
     this->setProperty("nav", "top");
 
 
-
-    ui->labIco->setFont(awesome->font(50));
-    ui->labIco->setText(QChar( fa::group));
-
-    ui->btnMenu_Min->setFont(awesome->font(20));
+    ui->btnMenu_Min->setFont(QtAwesome::getInstance()->font(20));
     ui->btnMenu_Min->setText(QChar(0xF068));
-    ui->btnMenu_Max->setFont(awesome->font(20));
+    ui->btnMenu_Max->setFont(QtAwesome::getInstance()->font(20));
     ui->btnMenu_Max->setText( QChar(0xf2d0));
-    ui->btnMenu_Close->setFont(awesome->font(20));
+    ui->btnMenu_Close->setFont(QtAwesome::getInstance()->font(20));
     ui->btnMenu_Close->setText(QChar(0xF00d));
 }
 
@@ -101,14 +95,23 @@ bool HTitleBar::getTitleItems()
                 QDomNode dom_node = list.item(i);
                 QDomElement element = dom_node.toElement();
 
-                titleItem info;
-                info.index = element.attributeNode("index").value().toInt();
-                info.name = element.attributeNode("name").value();
-                info.displayName = element.attributeNode("displayName").value();
-                info.icon = element.attributeNode("icon").value();
-                info.iconColor = element.attributeNode("iconColor").value();
-
-                barInfo.append(info);
+                if(element.nodeName()=="title")
+                {
+                    this->titleName = element.attributeNode("titleName").value();
+                    this->nameSize = element.attributeNode("nameSize").value();
+                    this->titleIcon = element.attributeNode("titleIcon").value();
+                    this->titleIconSize = element.attributeNode("titleIconSize").value();
+                }
+                else if(element.nodeName()=="item")
+                {
+                    titleItem info;
+                    info.index = element.attributeNode("index").value().toInt();
+                    info.name = element.attributeNode("name").value();
+                    info.displayName = element.attributeNode("displayName").value();
+                    info.icon = element.attributeNode("icon").value();
+                    info.iconColor = element.attributeNode("iconColor").value();
+                    barInfo.append(info);
+                }
             }
         }
 
@@ -133,6 +136,7 @@ void HTitleBar::addQToolBtn(const titleItem & item)
 
 
     QToolButton * btn = new QToolButton(ui->widgetTop);
+    btn->setCheckable(true);
     btn->setFixedHeight(70);
     btn->setFixedWidth(70);
     btn->setObjectName(item.name);
@@ -148,7 +152,7 @@ void HTitleBar::addQToolBtn(const titleItem & item)
     options.insert("scale-factor",1.0);
     //options.insert("anim", qVariantFromValue( new QtAwesomeAnimation(ui->btnConfig) ) );
 
-    btn->setIcon(awesome->icon( item.icon.toInt(0,16), options  ) );
+    btn->setIcon(QtAwesome::getInstance()->icon( item.icon.toInt(0,16), options  ) );
 
     connect(btn,SIGNAL(clicked(bool)),this,SLOT(itemClicked()));
 
@@ -162,6 +166,60 @@ void HTitleBar::init()
     getTitleItems();
 
     fillTitle();
+
+    showColorMenu(true);
+}
+
+void HTitleBar::showColorMenu(bool show)
+{
+    if(!show)
+    {
+        ui->btnMenu->hide();
+    }
+    else
+    {
+        ui->btnMenu->setFont(QtAwesome::getInstance()->font(18));
+        ui->btnMenu->setText(QChar(0xf0d7));
+        ui->btnMenu->setFocusPolicy(Qt::NoFocus);
+        ui->btnMenu->setPopupMode(QToolButton::InstantPopup);
+        QStringList name;
+        name<<"black"<<"white"<<"blue";
+        foreach (QString str, name)
+        {
+            QAction *action = new QAction(str, this);
+            ui->btnMenu->addAction(action);
+            connect(action, SIGNAL(triggered(bool)), this, SLOT(changeStyle()));
+        }
+        ui->btnMenu->show();
+    }
+}
+
+void HTitleBar::setTitle(const QString &title)
+{
+    ui->labTitle->setFont(QFont("WenQuanYi",this->nameSize.toInt()));
+
+    ui->labTitle->setText(this->titleName);
+
+    ui->labIco->setFont(QtAwesome::getInstance()->font(this->titleIconSize.toInt()));
+    ui->labIco->setText(QChar(this->titleIcon.toInt(0,16)));
+}
+
+void HTitleBar::changeStyle()
+{
+    QAction *act = (QAction *)sender();
+    QString name = act->text();
+    if(name == "black")
+    {
+        HQss::getInstance()->changeStyle(HQss::FlatBlack);
+    }
+    else if(name == "white")
+    {
+        HQss::getInstance()->changeStyle(HQss::FlatWhite);
+    }
+    else if (name == "blue")
+    {
+        HQss::getInstance()->changeStyle(HQss::LightBlue);
+    }
 }
 
 bool HTitleBar::compareByIndex(const HTitleBar::titleItem &r1, const HTitleBar::titleItem &r2)
@@ -219,38 +277,46 @@ void HTitleBar::on_btnMenu_Close_clicked()
 void HTitleBar::itemClicked()
 {
     QToolButton *btn = (QToolButton *)sender();
-
-    for(int i=0;i<barInfo.size();i++)
+    QList<QToolButton *> btns = this->findChildren<QToolButton *>();
+    foreach (QToolButton *b, btnList)
     {
-        titleItem item = barInfo.at(i);
-        QToolButton * temp = btnList.at(i);
-
-        if(item.name == btn->objectName())
+        titleItem item;
+        for(int i=0;i<barInfo.size();i++)
         {
-            QVariantMap options;
-            options.insert("color",QColor(item.iconColor));
-            options.insert("scale-factor",1.0);
-            options.insert("anim", qVariantFromValue( new QtAwesomeAnimation(btn,1000,30) ) );
+            if(barInfo.at(i).name == b->objectName())
+            {
+                item = barInfo.at(i);
+                break;
+            }
+        }
 
-            btn->setIcon(awesome->icon( item.icon.toInt(0,16), options  ) );
+        if (btn == b)
+        {
+            b->setChecked(true);
+
+            QVariantMap options;
+            options.insert("color",QColor(0,100,190));
+            options.insert("scale-factor",1.0);
+            b->setIcon(QtAwesome::getInstance()->icon( item.icon.toInt(0,16), options  ) );
 
         }
         else
         {
+            b->setChecked(false);
+
             QVariantMap options;
-            options.insert("color",QColor(item.iconColor));
+            options.insert("color",item.iconColor);
             options.insert("scale-factor",1.0);
-            //options.insert("anim", qVariantFromValue( new QtAwesomeAnimation(btn) ) );
-
-            temp->setIcon(awesome->icon( item.icon.toInt(0,16), options  ) );
-
+            b->setIcon(QtAwesome::getInstance()->icon( item.icon.toInt(0,16), options  ) );
         }
-
     }
+
 
     QString name = btn->objectName();
 
     emit HWindowApi::getInstance()->titleItemClicked(name);
+
+
 }
 
 

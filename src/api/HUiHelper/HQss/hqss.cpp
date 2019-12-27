@@ -14,6 +14,8 @@
 #include"qpainter.h"
 #include"qicon.h"
 #include"qimage.h"
+#include"qapplication.h"
+#include"qdebug.h"
 HQss * HQss::m_uiInstance=NULL;
 
 HQss *HQss::getInstance()
@@ -24,17 +26,69 @@ HQss *HQss::getInstance()
     }
     else
     {
-        return new HQss();
+       m_uiInstance = new HQss();
+       return m_uiInstance;
     }
 }
 
-HQss::HQss(QObject *parent):QObject(parent)
+HQss::HQss(QObject *parent):QObject(parent),currentQss("")
 {
    // loadAwesomeFont();
 }
 
 HQss::~HQss()
 {
+
+}
+
+void HQss::changeStyle(HQss::Style style)
+{
+    if(style == LightBlue)
+    {
+        changeQss(this->textColor,"#386487");
+        changeQss(this->panelColor,"#EAF7FF");
+        changeQss(this->borderColor,"#C0DCF2");
+        changeQss(this->normalColorStart,"#DEF0FE");
+        changeQss(this->normalColorEnd,"#C0DEF6");
+        changeQss(this->darkColorStart,"#F2F9FF");
+        changeQss(this->darkColorEnd,"#DAEFFF");
+        changeQss(this->highColor,"#00BB9E");
+
+    }
+    else if(style == FlatBlack)
+    {
+        changeQss(this->textColor,"#BEC0C2");
+        changeQss(this->panelColor,"#2E2F30");
+        changeQss(this->borderColor,"#67696B");
+        changeQss(this->normalColorStart,"#404244");
+        changeQss(this->normalColorEnd,"#404244");
+        changeQss(this->darkColorStart,"#262829");
+        changeQss(this->darkColorEnd,"#262829");
+        changeQss(this->highColor,"#00BB9E");
+    }
+    else if(style == FlatWhite)
+    {
+        changeQss(this->textColor,"#57595B");
+        changeQss(this->panelColor,"#FFFFFF");
+        changeQss(this->borderColor,"#B6B6B6");
+        changeQss(this->normalColorStart,"#E4E4E4");
+        changeQss(this->normalColorEnd,"#E4E4E4");
+        changeQss(this->darkColorStart,"#F6F6F6");
+        changeQss(this->darkColorEnd,"#F6F6F6");
+        changeQss(this->highColor,"#00BB9E");
+    }
+
+}
+
+void HQss::changeQss(QString &color, const QString &strColor)
+{
+    if (!color.isEmpty() && color != strColor)
+    {
+
+        currentQss = currentQss.replace(color, strColor);
+        color = strColor;
+        setStyle(currentQss);
+    }
 
 }
 
@@ -224,12 +278,101 @@ void HQss::setQss(QWidget *widget, const QString &path)
 {
     QFile file(path);
 
-    if (file.open(QFile::ReadOnly)) {
+    if (file.open(QFile::ReadOnly))
+    {
         QString qss = QLatin1String(file.readAll());
+
         QString paletteColor = qss.mid(20, 7);
-        widget->setPalette(QPalette(QColor(paletteColor)));
-        widget->setStyleSheet(qss);
+        qApp->setPalette(QPalette(QColor(paletteColor)));
+        qApp->setStyleSheet(qss);
         file.close();
+
+        currentQss = qss;
+
+        recordColor(qss);
+    }
+}
+
+void HQss::recordColor(const QString &str)
+{
+    QString flagTextColor = "TextColor:";
+    int indexTextColor = str.indexOf(flagTextColor);
+
+    if (indexTextColor >= 0)
+    {
+        QString strTextColor = str.mid(indexTextColor + flagTextColor.length(), 7);
+        qDebug() << flagTextColor << strTextColor;
+        textColor = strTextColor;
+    }
+
+    QString flagPanelColor = "PanelColor:";
+    int indexPanelColor = str.indexOf(flagPanelColor);
+
+    if (indexPanelColor >= 0)
+    {
+        QString strPanelColor = str.mid(indexPanelColor + flagPanelColor.length(), 7);
+        qDebug() << flagPanelColor << strPanelColor;
+        panelColor = strPanelColor;
+    }
+
+    QString flagBorderColor = "BorderColor:";
+    int indexBorderColor = str.indexOf(flagBorderColor);
+
+    if (indexBorderColor >= 0)
+    {
+        QString strBorderColor = str.mid(indexBorderColor + flagBorderColor.length(), 7);
+        qDebug() << flagBorderColor << strBorderColor;
+        borderColor = strBorderColor;
+    }
+
+    QString flagNormalColorStart = "NormalColorStart:";
+    int indexNormalColorStart = str.indexOf(flagNormalColorStart);
+
+    if (indexNormalColorStart >= 0)
+    {
+        QString strNormalColorStart = str.mid(indexNormalColorStart + flagNormalColorStart.length(), 7);
+        qDebug() << flagNormalColorStart << strNormalColorStart;
+        normalColorStart = strNormalColorStart;
+    }
+
+    QString flagNormalColorEnd = "NormalColorEnd:";
+    int indexNormalColorEnd = str.indexOf(flagNormalColorEnd);
+
+    if (indexNormalColorEnd >= 0)
+    {
+        QString strNormalColorEnd = str.mid(indexNormalColorEnd + flagNormalColorEnd.length(), 7);
+        qDebug() << flagNormalColorEnd << strNormalColorEnd;
+        normalColorEnd = strNormalColorEnd;
+    }
+
+    QString flagDarkColorStart = "DarkColorStart:";
+    int indexDarkColorStart = str.indexOf(flagDarkColorStart);
+
+    if (indexDarkColorStart >= 0)
+    {
+        QString strDarkColorStart = str.mid(indexDarkColorStart + flagDarkColorStart.length(), 7);
+        qDebug() << flagDarkColorStart << strDarkColorStart;
+        darkColorStart = strDarkColorStart;
+    }
+
+    QString flagDarkColorEnd = "DarkColorEnd:";
+    int indexDarkColorEnd = str.indexOf(flagDarkColorEnd);
+
+    if (indexDarkColorEnd >= 0)
+    {
+        QString strDarkColorEnd = str.mid(indexDarkColorEnd + flagDarkColorEnd.length(), 7);
+        qDebug() << flagDarkColorEnd << strDarkColorEnd;
+        darkColorEnd = strDarkColorEnd;
+    }
+
+    QString flagHighColor = "HighColor:";
+    int indexHighColor = str.indexOf(flagHighColor);
+
+    if (indexHighColor >= 0)
+    {
+        QString strHighColor = str.mid(indexHighColor + flagHighColor.length(), 7);
+        qDebug() << flagHighColor << strHighColor;
+        highColor = strHighColor;
     }
 }
 
@@ -240,4 +383,22 @@ void HQss::loadAwesomeFont()
     QString fontName = QFontDatabase::applicationFontFamilies(fontId).at(0);
 
     m_iconFont = QFont(fontName);
+}
+
+void HQss::setStyle(const QString &str)
+{
+    static QString qss;
+
+    if (qss == str)
+    {
+        return;
+    }
+
+    qss = str;
+    QString paletteColor = str.mid(20, 7);
+    qApp->setPalette(QPalette(QColor(paletteColor)));
+    qApp->setStyleSheet(str);
+
+
+
 }

@@ -10,12 +10,12 @@
 #include"hqss.h"
 #include"hwindowapi.h"
 HProjectWindow::HProjectWindow(QWidget *parent) :
-    QMainWindow(parent),m_stackedLayout(NULL),m_titlebar(NULL),
+    QMainWindow(parent),m_stackedLayout(NULL),m_titlebar(NULL),m_statusBar(NULL),
     ui(new Ui::HProjectWindow)
 {
     ui->setupUi(this);
 
-    initTitleLayout();
+    initWorkSpace();
 
     setStackedLayout();
 
@@ -44,16 +44,24 @@ void HProjectWindow::initWorkSpace()
                     qDebug()<<"get it";
                     continue;
                 }
-                else if(pluItem->pluName == "")
+                else if(pluItem->pluName == "statusWidget")
                 {
+                    this->m_statusBar = pluInter->createWindow(this);
+                    this->setStatusBar((QStatusBar *)m_statusBar);
                     continue;
                 }
-
-
-
-
             }
+    }
 
+    if(m_titlebar!=NULL)
+    {
+        QVBoxLayout *layout = new QVBoxLayout(ui->titleWidget);
+        layout->setContentsMargins(0,0,0,0);
+
+        ui->titleWidget->setFixedHeight(m_titlebar->height());
+        layout->setContentsMargins(0,0,0,0);
+
+        layout->addWidget(m_titlebar);
     }
 }
 
@@ -74,10 +82,6 @@ void HProjectWindow::initTitleLayout()
             {
                 continue;
             }
-
-
-
-
         }
 
     }
@@ -119,7 +123,7 @@ void HProjectWindow::setStackedLayout()
         //
         if (pluItem->pluType == HDefine::H_UI_PRO)
         {
-            if (pluItem->pluName == "titleBar")
+            if (pluItem->pluName == "titleBar"||pluItem->pluName == "statusWidget")
             {
                 //this->m_titlebar = pluInter->createWindow(this);
                 //qDebug()<<"get it";
@@ -179,6 +183,8 @@ void HProjectWindow::_setStyle()
 
     this->setProperty("canMove", true);
     this->installEventFilter(HWindowApi::getInstance());
+
+
 
 }
 

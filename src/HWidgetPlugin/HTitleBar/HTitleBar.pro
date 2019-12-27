@@ -18,6 +18,7 @@ DESTDIR =   ../../../bin/sysPlugin/function/
 INCLUDEPATH += ../../../include/define/
 INCLUDEPATH += ../../../include/interface/
 INCLUDEPATH += ../../api/HUiHelper/QtAwesome/
+INCLUDEPATH += ../../api/HUiHelper/HQss/
 INCLUDEPATH += ../../HConfigManage/
 INCLUDEPATH += ../../api/HWindowApi/
 

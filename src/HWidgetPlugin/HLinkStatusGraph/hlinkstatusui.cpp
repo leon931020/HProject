@@ -9,7 +9,6 @@
 #include"QtAwesome.h"
 HLinkStatusUi::HLinkStatusUi(QWidget *parent) :
     QWidget(parent),m_graphWidget(NULL),m_rightWidget(NULL),
-    awesome(NULL),
     ui(new Ui::HLinkStatusUi)
 {
     ui->setupUi(this);
@@ -31,14 +30,9 @@ void HLinkStatusUi::paintEvent(QPaintEvent *)
 }
 void HLinkStatusUi::init()
 {
-    if(awesome==NULL)
-    {
-        awesome = new QtAwesome (this);
-        awesome->initFontAwesome();
-    }
+
     initLeftWidget();
     initRightWidget();
-
 
 }
 
@@ -63,7 +57,7 @@ void HLinkStatusUi::initRightWidget()
     {
         m_rightWidget = new RightPanelWidget();
         m_rightWidget->setFrame(0,"#ffffff");
-        m_rightWidget->setBorder(0,"#ffffff");
+        //m_rightWidget->setBorder(0,"#ffffff");
         QHBoxLayout * layout = new QHBoxLayout(ui->rightWidget);
         layout->setContentsMargins(0,0,0,0);
 
@@ -120,16 +114,14 @@ void HLinkStatusUi::initList()
         btn->setFixedHeight(100);
        // btn->setFixedWidth(100);
         btn->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
-        if(awesome)
-        {
-            QVariantMap options;
-            options.insert("color",QColor("#1ABC9C"));
-            //scale-factor
-            options.insert("scale-factor",1.0);
-            //btn->setFont(awesome->font(50));
-            btn->setIcon(awesome->icon( fa::desktop, options  ) );
+        QVariantMap options;
+        options.insert("color",QColor("#1ABC9C"));
+        //scale-factor
+        options.insert("scale-factor",1.0);
+        //btn->setFont(awesome->font(50));
+        btn->setIcon(QtAwesome::getInstance()->icon( fa::desktop, options  ) );
 
-        }
+
         widgets1.append(btn);
     }
 
