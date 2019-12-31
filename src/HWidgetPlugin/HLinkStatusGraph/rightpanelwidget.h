@@ -14,7 +14,7 @@ public:
 
 protected:
     void resizeEvent(QResizeEvent *);
-
+    void paintEvent(QPaintEvent *event);
 private:
     QScrollArea *scrollArea;
     QWidget *scrollAreaWidgetContents;

@@ -6,6 +6,7 @@ SUBDIRS += \
     HPluginManage \
     HPojecetManage \
     HWidgetPlugin \
+    HProjectWidget
 
 
 

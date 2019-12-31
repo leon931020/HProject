@@ -17,6 +17,10 @@
 #include"qapplication.h"
 #include"qdebug.h"
 HQss * HQss::m_uiInstance=NULL;
+HQss::CGarbo HQss::Garbo;
+
+QString HQss::FontName = "Microsoft Yahei";
+int HQss::FontSize = 10;
 
 HQss *HQss::getInstance()
 {
@@ -33,7 +37,7 @@ HQss *HQss::getInstance()
 
 HQss::HQss(QObject *parent):QObject(parent),currentQss("")
 {
-   // loadAwesomeFont();
+
 }
 
 HQss::~HQss()
@@ -95,7 +99,7 @@ void HQss::changeQss(QString &color, const QString &strColor)
 
 }
 
-void HQss::setWidgetStyle(QWidget *outWidget, HQss::Style style)
+void HQss::setWidgetStyle(HQss::Style style, QWidget *outWidget)
 {
     if(style==LightBlue)
     {
@@ -110,41 +114,6 @@ void HQss::setWidgetStyle(QWidget *outWidget, HQss::Style style)
         setQss(outWidget,":/other/qss/flatblack.css");
     }
 }
-
-void HQss::setIcon(QLabel *lab, QChar c, quint32 size)
-{
-
-    m_iconFont.setPointSize(size);
-    lab->setFont(m_iconFont);
-    lab->setText(c);
-}
-
-void HQss::setIcon(QAbstractButton *btn, QChar c, quint32 size)
-{
-
-    m_iconFont.setPointSize(size);
-    btn->setFont(m_iconFont);
-    btn->setText(c);
-}
-
-QIcon HQss::Ico(QChar c, QColor color ,QSize icoSize ,int size )
-{
-
-    QImage image(icoSize, QImage::Format_ARGB32);
-    QPainter painter(&image);
-    painter.setCompositionMode(QPainter::CompositionMode_DestinationOver);
-
-    QPen pen = painter.pen();
-    pen.setColor(color);
-    m_iconFont.setPixelSize(size);
-    painter.setPen(pen);
-
-    painter.setFont(m_iconFont);
-
-    painter.drawText(image.rect(), Qt::AlignCenter, c);
-    return QIcon(QPixmap::fromImage(image));
-}
-
 
 void HQss::setPushButtonQss(QPushButton *btn, int radius, int padding,
                               const QString &normalColor, const QString &normalTextColor,
@@ -286,8 +255,16 @@ void HQss::setQss(QWidget *widget, const QString &path)
         QString qss = QLatin1String(file.readAll());
 
         QString paletteColor = qss.mid(20, 7);
-        qApp->setPalette(QPalette(QColor(paletteColor)));
-        qApp->setStyleSheet(qss);
+        if(widget==NULL)
+        {
+            qApp->setPalette(QPalette(QColor(paletteColor)));
+            qApp->setStyleSheet(qss);
+        }
+        else
+        {
+            widget->setPalette(QPalette(QColor(paletteColor)));
+            widget->setStyleSheet(qss);
+        }
         file.close();
 
         currentQss = qss;
@@ -377,15 +354,6 @@ void HQss::recordColor(const QString &str)
         qDebug() << flagHighColor << strHighColor;
         highColor = strHighColor;
     }
-}
-
-void HQss::loadAwesomeFont()
-{
-    int fontId = QFontDatabase::addApplicationFont(":/font/other/fontawesome/fontawesome-webfont.ttf");
-
-    QString fontName = QFontDatabase::applicationFontFamilies(fontId).at(0);
-
-    m_iconFont = QFont(fontName);
 }
 
 void HQss::setStyle(const QString &str)

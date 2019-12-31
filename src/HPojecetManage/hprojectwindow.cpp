@@ -175,7 +175,7 @@ bool HProjectWindow::switchProWnd(QString funName)
 
 void HProjectWindow::_setStyle()
 {
-    HQss::getInstance()->setWidgetStyle(this,HQss::FlatBlack);
+    HQss::getInstance()->setWidgetStyle(HQss::FlatBlack);
     this->setWindowFlags(Qt::FramelessWindowHint );
     HWindowApi *api = HWindowApi::getInstance();
     this->resize(api->screenWidth - 510,api->screenHeight - 150);

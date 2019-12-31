@@ -57,7 +57,7 @@ void HLinkStatusUi::initRightWidget()
     if(m_rightWidget == NULL)
     {
         m_rightWidget = new RightPanelWidget();
-        m_rightWidget->setFrame(0,"#ffffff");
+        //m_rightWidget->setFrame(0,"#ffffff");
         //m_rightWidget->setBorder(0,"#ffffff");
         QHBoxLayout * layout = new QHBoxLayout(ui->rightWidget);
         layout->setContentsMargins(0,0,0,0);

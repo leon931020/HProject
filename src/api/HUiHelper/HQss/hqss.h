@@ -26,6 +26,8 @@ public:
 
     static HQss *getInstance();
 
+    static int FontSize;            //应用程序字体大小
+    static QString FontName;        //应用程序字体名称
 private:
 
     explicit HQss(QObject *parent = 0);
@@ -44,20 +46,8 @@ public:
     void changeQss(QString &color, const QString &strColor);
 
     //设置全局widget样式
-    void setWidgetStyle(QWidget *outWidget,Style style);
+    void setWidgetStyle(Style style,QWidget *outWidget = NULL);
 
-    //设置label图形字体
-    void setIcon(QLabel *lab, QChar c, quint32 size = 16);
-
-    //设置button图形字体
-    void setIcon(QAbstractButton *btn, QChar c, quint32 size = 16);
-
-    //返回图形字体图标
-    QIcon Ico(QChar c,  QColor color = QColor(255,0,0), QSize icoSize = QSize(16,16),int size = 16);
-
-
-
-//其它样式设置共有函数结束
 
 
 
@@ -121,9 +111,6 @@ private:
 
     void recordColor(const QString &str);
 
-    //加载AwesomeFont图形字体库
-    void loadAwesomeFont();
-
     void setStyle(const QString &str);
 
 
@@ -136,17 +123,25 @@ private:
     QString darkColorStart;     //加深渐变开始颜色
     QString darkColorEnd;       //加深渐变结束颜色
     QString highColor;          //边缘高亮颜色
+public:
+    class CGarbo
+    {
+    public:
 
+        ~CGarbo()
+        {
+            if (m_uiInstance != NULL)
 
-private:
+            {
+                delete m_uiInstance;
+                m_uiInstance= NULL;
+            }
+        }
 
+    };
+    static CGarbo Garbo;
 
-
-    QFont m_iconFont;
-
-
-   // bool _loadedFont;
-
+    Q_DISABLE_COPY(HQss)
 };
 
 #endif // HQss_H

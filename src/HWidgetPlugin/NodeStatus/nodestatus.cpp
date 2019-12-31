@@ -74,6 +74,8 @@ void NodeStatus::initNodeList()
         QHBoxLayout *layout = new QHBoxLayout(ui->nodeListWidget);
         layout->setContentsMargins(0,0,0,0);
         layout->addWidget(nodeList);
+
+        ui->nodeListWidget->setProperty("form",true);
     }
 }
 

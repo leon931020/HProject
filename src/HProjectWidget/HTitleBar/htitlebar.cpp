@@ -123,11 +123,15 @@ void HTitleBar::fillTitle()
 {
 
     qSort(barInfo.begin(),barInfo.end(),compareByIndex);
+
     QList<titleItem>::iterator itr = barInfo.begin();
     for (; itr != barInfo.end();++itr)
     {
         addQToolBtn(*itr);
     }
+
+    QToolButton *btn = btnList.at(0);
+    btn->setChecked(true);
 }
 
 void HTitleBar::addQToolBtn(const titleItem & item)

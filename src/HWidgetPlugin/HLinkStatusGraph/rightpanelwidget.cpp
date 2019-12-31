@@ -2,6 +2,8 @@
 #include "qscrollarea.h"
 #include "qframe.h"
 #include "QVBoxLayout"
+#include"qpainter.h"
+#include"qstyleoption.h"
 RightPanelWidget::RightPanelWidget(QWidget *parent) : QWidget(parent)
 {
     scrollArea = new QScrollArea(this);
@@ -27,6 +29,14 @@ RightPanelWidget::RightPanelWidget(QWidget *parent) : QWidget(parent)
 void RightPanelWidget::resizeEvent(QResizeEvent *)
 {
     scrollArea->resize(this->size());
+}
+void RightPanelWidget::paintEvent(QPaintEvent *event)
+{
+    QStyleOption opt;
+    opt.init(this);
+    QPainter p(this);
+
+    style()->drawPrimitive(QStyle::PE_Widget,&opt,&p,this);
 }
 
 QSize RightPanelWidget::sizeHint() const
